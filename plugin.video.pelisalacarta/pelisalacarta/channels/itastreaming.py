@@ -101,7 +101,7 @@ def grabing(item):
         filmtitle = item.title
         
         #open the selenium connection
-        chromedriver = '/root/.kodi/addons/plugin.video.itastreaming/chromedriver'
+        chromedriver = '~/.kodi/addons/plugin.video.pelisalacarta/chromedriver'
         os.environ['webdriver.chrome.driver'] = chromedriver
         display = Display(visible=0, size=(800, 600))
         display.start()
@@ -115,7 +115,7 @@ def grabing(item):
         for block in nData:
             #extract parametert url from list
             
-            itemlist.append( Item(channel=__channel__, action="playit", title=filmtitle + "  quality: " + block['height'] , url=block['url'] ))
+            itemlist.append( Item(channel=__channel__, action="playit", title=filmtitle + "  quality: " + block['width'] + " x " + block['height'], url=block['url'] ))
     return itemlist
 
 def playit(item):
