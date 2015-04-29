@@ -116,6 +116,7 @@ def grabing(item):
             #extract parametert url from list
             
             itemlist.append( Item(channel=__channel__, action="playit", title=filmtitle + "  quality: " + block['width'] + " x " + block['height'], url=block['url'] ))
+        br.close()
     return itemlist
 
 def playit(item):
