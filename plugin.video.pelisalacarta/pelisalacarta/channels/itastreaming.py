@@ -64,7 +64,7 @@ def mainlist(item):
 
 
 
-#azione "peliculas" server per estrerre i titoli
+
 def peliculas(item):
     logger.info("pelisalacarta.itastreaming peliculas")
     itemlist = []
@@ -96,7 +96,7 @@ def peliculas(item):
 def grabing(item):
     logger.info("pelisalacarta.itastreaming grabing")
     itemlist = []
-    #esegue questa funziona solo se si clicca sul titolo del film
+    
     if item.title:
         filmtitle = item.title
         
@@ -110,8 +110,8 @@ def grabing(item):
         br.get(item.url)  
         #variable pro films
         nData = br.execute_script("return nData")
-        #print nData #ok we have all the urls
-        #xbmc.Player(xbmc.PLAYER_CORE_MPLAYER).play(decoded)
+        
+        
         for block in nData:
             #extract parametert url from list
             
