@@ -54,11 +54,11 @@ def mainlist(item):
     itemlist.append( Item(channel=__channel__ , action="peliculas", title="storico" , url="http://itastreaming.tv/genere/storico" ))
     itemlist.append( Item(channel=__channel__ , action="peliculas", title="thriller" , url="http://itastreaming.tv/genere/thriller" ))
     itemlist.append( Item(channel=__channel__ , action="peliculas", title="western" , url="http://itastreaming.tv/genere/western" ))
-    itemlist.append( Item(channel=__channel__ , action="peliculas", title="HD" , url="http://itastreaming.tv/genere/qualita/hd" ))
-    itemlist.append( Item(channel=__channel__ , action="peliculas", title="DVD-RIP" , url="http://itastreaming.tv/genere/qualita/dvdripac3" ))
-    itemlist.append( Item(channel=__channel__ , action="peliculas", title="CAM" , url="http://itastreaming.tv/genere/qualita/cam" ))
-    itemlist.append( Item(channel=__channel__ , action="peliculas", title="HD-MD" , url="http://itastreaming.tv/genere/qualita/hd-md" ))
-    itemlist.append( Item(channel=__channel__ , action="peliculas", title="HD-TS" , url="http://itastreaming.tv/genere/qualita/hd-ts" ))
+    itemlist.append( Item(channel=__channel__ , action="peliculas", title="HD" , url="http://itastreaming.tv/qualita/hd" ))
+    itemlist.append( Item(channel=__channel__ , action="peliculas", title="DVD-RIP" , url="http://itastreaming.tv/qualita/dvdripac3" ))
+    itemlist.append( Item(channel=__channel__ , action="peliculas", title="CAM" , url="http://itastreaming.tv/qualita/cam" ))
+    itemlist.append( Item(channel=__channel__ , action="peliculas", title="HD-MD" , url="http://itastreaming.tv/qualita/hd-md" ))
+    itemlist.append( Item(channel=__channel__ , action="peliculas", title="HD-TS" , url="http://itastreaming.tv/qualita/hd-ts" ))
          
     return itemlist
 
