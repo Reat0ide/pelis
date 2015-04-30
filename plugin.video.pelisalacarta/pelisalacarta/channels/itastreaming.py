@@ -64,7 +64,7 @@ def mainlist(item):
 
 
 
-
+#azione "peliculas" server per estrerre i titoli
 def peliculas(item):
     logger.info("pelisalacarta.itastreaming peliculas")
     itemlist = []
@@ -88,7 +88,19 @@ def peliculas(item):
         
         if (DEBUG): logger.info("title=["+title+"], url=["+url+"], thumbnail=["+thumbnail+"]")
         itemlist.append( Item(channel=__channel__, action="grabing", title=title , url=url , thumbnail=scrapedthumbnail , plot=scrapedplot , folder=True) )
-        
+     
+    #next page
+    print item.url
+    patternpage = "<a rel='nofollow' class=previouspostslink' href='([^']+)'>Seguente &rsaquo;</a>" 
+    matches = re.compile(patternpage,re.DOTALL).findall(data)
+    print matches
+    scrapertools.printMatches(matches)
+    
+    
+    if len(matches)>0:
+        scrapedurl = urlparse.urljoin(item.url,matches[0])
+        itemlist.append( Item(channel=__channel__, action="peliculas", title="Next Page >>" , url=scrapedurl , folder=True) )
+    
     
     return itemlist
 
@@ -96,12 +108,12 @@ def peliculas(item):
 def grabing(item):
     logger.info("pelisalacarta.itastreaming grabing")
     itemlist = []
-    
+    #esegue questa funziona solo se si clicca sul titolo del film
     if item.title:
         filmtitle = item.title
         
         #open the selenium connection
-        chromedriver = '~/.kodi/addons/plugin.video.pelisalacarta/chromedriver'
+        chromedriver = '/root/.kodi/addons/plugin.video.pelisalacarta/chromedriver'
         os.environ['webdriver.chrome.driver'] = chromedriver
         display = Display(visible=0, size=(800, 600))
         display.start()
@@ -110,12 +122,11 @@ def grabing(item):
         br.get(item.url)  
         #variable pro films
         nData = br.execute_script("return nData")
-        
-        
+        #print nData #ok we have all the urls
+        #xbmc.Player(xbmc.PLAYER_CORE_MPLAYER).play(decoded)
         for block in nData:
             #extract parametert url from list
-            
-            itemlist.append( Item(channel=__channel__, action="playit", title=filmtitle + "  quality: " + block['width'] + " x " + block['height'], url=block['url'] ))
+            itemlist.append( Item(channel=__channel__, action="playit", title=filmtitle + "  quality: " + block['width'] +  " x " + block['height'] , url=block['url'] ))
         br.close()
     return itemlist
 
