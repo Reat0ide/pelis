@@ -94,6 +94,12 @@ def peliculas(item):
     patternpage = "<a rel='nofollow' class=previouspostslink' href='([^']+)'>Seguente &rsaquo;</a>" 
     matches = re.compile(patternpage,re.DOTALL).findall(data)
     print matches
+    
+    if not matches:
+		patternpage = "<span class='current'.*?</span>"
+		patternpage += "<a rel='nofollow' class='page larger' href='([^']+)'>.*?</a>"
+		matches = re.compile(patternpage,re.DOTALL).findall(data) 
+    
     scrapertools.printMatches(matches)
     
     
