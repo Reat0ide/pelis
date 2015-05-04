@@ -20,10 +20,10 @@ from servers import servertools
 import json
    
 
-__channel__ = "itastreaming"
+__channel__ = "itastreaming_test"
 __category__ = "F"
 __type__ = "generic"
-__title__ = "itastreaming"
+__title__ = "itastreaming_test"
 __language__ = "IT"
 
 DEBUG = config.get_setting("debug")
@@ -32,7 +32,7 @@ def isGeneric():
     return True
 
 def mainlist(item):
-    logger.info("pelisalacarta.itastreaming  mainlist")
+    logger.info("pelisalacarta.itastreaming_test  mainlist")
 
     itemlist = []
     itemlist.append( Item(channel=__channel__ , action="peliculas", title="animazione" , url="http://itastreaming.tv/genere/animazione" ))
@@ -67,7 +67,7 @@ def mainlist(item):
 
 #azione "peliculas" server per estrerre i titoli
 def peliculas(item):
-    logger.info("pelisalacarta.itastreaming peliculas")
+    logger.info("pelisalacarta.itastreaming_test peliculas")
     itemlist = []
 
     # Descarga la pagina
@@ -113,7 +113,7 @@ def peliculas(item):
 
 
 def grabing(item):
-    logger.info("pelisalacarta.itastreaming grabing")
+    logger.info("pelisalacarta.itastreaming_test grabing")
     itemlist = []
     #esegue questa funziona solo se si clicca sul titolo del film
     if item.title:
@@ -128,7 +128,7 @@ def grabing(item):
         dcap = dict(DesiredCapabilities.PHANTOMJS)
         dcap["phantomjs.page.settings.userAgent"] = (
              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
-        browser = webdriver.PhantomJS(executable_path='usr/local/bin/phantomjs',desired_capabilities = dcap, service_log_path=os.path.devnull)
+        browser = webdriver.PhantomJS(executable_path='/storage/.kodi/addons/plugin.video.pelisalacarta/phantomjs',desired_capabilities = dcap, service_log_path=os.path.devnull)
         
        
        
