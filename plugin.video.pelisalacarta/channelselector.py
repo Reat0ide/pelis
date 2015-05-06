@@ -184,7 +184,7 @@ def filterchannels(category):
             returnlist.append(channel)
 
     return returnlist
-
+'''
 def channels_history_list():
     itemlist = []
     itemlist.append( Item( title="Newpct (08/03/2013)"               , channel="newpct"          , language="ES"    , category="F,S,D,A"       , type="generic"  )) # jesus 08/03/2013
@@ -226,6 +226,7 @@ def channels_history_list():
     if config.get_setting("enableadultmode") == "true": itemlist.append( Item( title="Serviporno (16/02/2015)"          , channel="serviporno"          , language="ES" , category="F" , type="generic"    ))
     if config.get_setting("enableadultmode") == "true": itemlist.append( Item( title="Serviporno (17/02/2015)"          , channel="serviporno"          , language="ES" , category="F" , type="generic"    ))
     return itemlist
+'''
 
 def channels_list():
     itemlist = []
@@ -253,7 +254,7 @@ def channels_list():
     itemlist.append( Item( title="Robinfilm (IT)"        , channel="robinfilm"            , language="IT" , category="F"          , type="generic"  )) # jesus 16/05/2011
     itemlist.append( Item( title="Serie TV Sub ITA"          , channel="serietvsubita"         , language="IT" , category="S"        , type="generic" , extra="Series" ))
     itemlist.append( Item( title="Griffin Ita"          , channel="griffin"         , language="IT" , category="F,S,D,A"        , type="generic" ))
-    itemlist.append( Item( title="Itastreaming_test"          , channel="itastreaming_test"         , language="IT" , category="F,S,D,A"        , type="generic" ))
+    #itemlist.append( Item( title="Itastreaming_test"          , channel="itastreaming_test"         , language="IT" , category="F,S,D,A"        , type="generic" ))
     return itemlist
 
 def addfolder(nombre,channelname,accion,category="",thumbnailname="",thumbnail="",folder=True):

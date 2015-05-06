@@ -6,10 +6,11 @@
 #------------------------------------------------------------
 import selenium
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from pyvirtualdisplay import Display
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+#from selenium.webdriver.common.keys import Keys
+#from pyvirtualdisplay import Display
 import urlparse,urllib2,urllib,re,xbmcplugin,xbmcgui,xbmcaddon,xbmc
-import os, sys
+import os, sys, time
 
 from core import logger
 from core import config
@@ -96,9 +97,9 @@ def peliculas(item):
     print matches
     
     if not matches:
-		patternpage = "<span class='current'.*?</span>"
-		patternpage += "<a rel='nofollow' class='page larger' href='([^']+)'>.*?</a>"
-		matches = re.compile(patternpage,re.DOTALL).findall(data) 
+	    patternpage = "<span class='current'.*?</span>"
+	    patternpage += "<a rel='nofollow' class='page larger' href='([^']+)'>.*?</a>"
+	    matches = re.compile(patternpage,re.DOTALL).findall(data)
     
     scrapertools.printMatches(matches)
     
@@ -110,26 +111,27 @@ def peliculas(item):
     
     return itemlist
 
-
+# use selenium with phantomjs
 def grabing(item):
     logger.info("pelisalacarta.itastreaming grabing")
     itemlist = []
-    #esegue questa funziona solo se si clicca sul titolo del film
     if item.title:
         filmtitle = item.title
         
         #open the selenium connection
-        chromedriver = '/root/.kodi/addons/plugin.video.pelisalacarta/chromedriver'
-        os.environ['webdriver.chrome.driver'] = chromedriver
-        display = Display(visible=0, size=(800, 600))
-        display.start()
-        br = webdriver.Chrome(chromedriver)
-       
-        br.get(item.url)  
-        #variable pro films
+        #chromedriver = '/root/.kodi/addons/plugin.video.pelisalacarta/chromedriver'
+        #os.environ['webdriver.chrome.driver'] = chromedriver
+        #display = Display(visible=0, size=(800, 600))
+        #display.start()
+        #br = webdriver.Chrome(chromedriver)
+
+        dcap = dict(DesiredCapabilities.PHANTOMJS)
+        dcap["phantomjs.page.settings.userAgent"] = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
+        br = webdriver.PhantomJS(executable_path='/storage/.kodi/addons/plugin.video.pelisalacarta/phantomjs',desired_capabilities = dcap, service_log_path=os.path.devnull)
+        br.get(item.url)
+        br.get(item.url)
+
         nData = br.execute_script("return nData")
-        #print nData #ok we have all the urls
-        #xbmc.Player(xbmc.PLAYER_CORE_MPLAYER).play(decoded)
         for block in nData:
             #extract parametert url from list
             itemlist.append( Item(channel=__channel__, action="playit", title=filmtitle + "  quality: " + block['width'] +  " x " + block['height'] , url=block['url'] ))
