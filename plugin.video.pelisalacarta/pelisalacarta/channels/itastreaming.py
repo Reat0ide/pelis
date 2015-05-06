@@ -65,7 +65,7 @@ def mainlist(item):
 
 
 
-#azione "peliculas" server per estrerre i titoli
+
 def peliculas(item):
     logger.info("pelisalacarta.itastreaming peliculas")
     itemlist = []
@@ -111,7 +111,7 @@ def peliculas(item):
     
     return itemlist
 
-# use selenium with phantomjs
+# use selenium with phantomjs (phantomjs - 1.9.8 Linux x86_64 )
 def grabing(item):
     logger.info("pelisalacarta.itastreaming grabing")
     itemlist = []
