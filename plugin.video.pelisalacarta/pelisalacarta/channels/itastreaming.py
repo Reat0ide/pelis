@@ -28,8 +28,11 @@ __language__ = "IT"
 
 DEBUG = config.get_setting("debug")
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:20.0) Gecko/20100101 Firefox/20.0"
+
+
 def isGeneric():
     return True
+
 
 def mainlist(item):
     logger.info("pelisalacarta.itastreaming  mainlist")
@@ -65,8 +68,6 @@ def mainlist(item):
     return itemlist
 
 
-
-
 def peliculas(item):
     logger.info("pelisalacarta.itastreaming peliculas")
     itemlist = []
@@ -98,14 +99,13 @@ def peliculas(item):
     print matches
     
     if not matches:
-	    patternpage = "<span class='current'.*?</span>"
-	    patternpage += "<a rel='nofollow' class='page larger' href='([^']+)'>.*?</a>"
-	    matches = re.compile(patternpage,re.DOTALL).findall(data)
+        patternpage = "<span class='current'.*?</span>"
+        patternpage += "<a rel='nofollow' class='page larger' href='([^']+)'>.*?</a>"
+        matches = re.compile(patternpage,re.DOTALL).findall(data)
     
     scrapertools.printMatches(matches)
-    
-    
-    if len(matches)>0:
+
+    if len(matches) > 0:
         scrapedurl = urlparse.urljoin(item.url,matches[0])
         itemlist.append( Item(channel=__channel__, action="peliculas", title="Next Page >>" , url=scrapedurl , folder=True) )
     
