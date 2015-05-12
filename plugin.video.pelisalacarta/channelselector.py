@@ -213,7 +213,7 @@ def channels_list():
     itemlist.append( Item( title="Serie TV Sub ITA"          , channel="serietvsubita"         , language="IT" , category="S"        , type="generic" , extra="Series" ))
     itemlist.append( Item( title="Griffin Ita"          , channel="griffin"         , language="IT" , category="F,S,D,A"        , type="generic" ))
     itemlist.append( Item( title="Itastreaming_test"          , channel="itastreaming_test"         , language="IT" , category="F,S,D,A"        , type="generic" ))
-    itemlist.append( Item( title="Filmsubito.tv (IT)"          , channel="filmsubito"         , language="IT" , category="F,S,D,A"        , type="generic" ))
+    itemlist.append( Item( title="Guardare Film (IT)"          , channel="guardarefilm"         , language="IT" , category="F,S,D,A"        , type="generic" ))
     return itemlist
 
 def addfolder(nombre,channelname,accion,category="",thumbnailname="",thumbnail="",folder=True):
