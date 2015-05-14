@@ -3,12 +3,11 @@
 # pelisalacarta - XBMC Plugin
 # Canal para itastreaming
 # http://blog.tvalacarta.info/plugin-xbmc/pelisalacarta/
+# created by Reat0ide 2015 for pelisalacarta
 #------------------------------------------------------------
 import selenium
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-#from selenium.webdriver.common.keys import Keys
-#from pyvirtualdisplay import Display
 import urlparse,urllib2,urllib,re,xbmcplugin,xbmcgui,xbmcaddon,xbmc
 import os, sys, time
 
@@ -39,6 +38,7 @@ def mainlist(item):
 
     itemlist = []
     itemlist.append( Item(channel=__channel__ , action="peliculas", title="ultimi film inseriti..." , url="http://itastreaming.tv" ))
+    itemlist.append( Item(channel=__channel__ , action="peliculas", title="Cerca Film"))
     itemlist.append( Item(channel=__channel__ , action="peliculas", title="animazione" , url="http://itastreaming.tv/genere/animazione" ))
     itemlist.append( Item(channel=__channel__ , action="peliculas", title="avventura" , url="http://itastreaming.tv/genere/avventura" ))
     itemlist.append( Item(channel=__channel__ , action="peliculas", title="azione" , url="http://itastreaming.tv/genere/azione" ))
@@ -73,24 +73,20 @@ def search(item,text):
     itemlist = []
     text = text.replace(" ","%20")
     item.url = "http://itastreaming.tv/?s="+text #http://itastreaming.tv/?s=nani
-
-
     try:
 
         data = scrapertools.cache_page(item.url)
-
         pattern = '<img class="imx" style="margin-top:0px;" src="?([^>"]+)"?.*?alt="?([^>"]+)"?.*?'
         pattern += '<h3><a href="?([^>"]+)"?.*?</h3>'
         matches = re.compile(pattern,re.DOTALL).findall(data)
-
         scrapertools.printMatches(matches)
-
+        
         for scrapedthumbnail,scrapedtitle,scrapedurl in matches:
             title = scrapedtitle.strip()
             url = urlparse.urljoin(item.url,scrapedurl)
             thumbnail = urlparse.urljoin(item.url,scrapedthumbnail)
-
             itemlist.append( Item(channel=__channel__, action="grabing", title=title , url=url , thumbnail=thumbnail , folder=True) )
+        
         return itemlist
 
     except:
@@ -100,15 +96,10 @@ def search(item,text):
         return []
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
 def peliculas(item):
     logger.info("pelisalacarta.itastreaming peliculas")
     itemlist = []
-
-    # Descarga la pagina
+    
     data = scrapertools.cache_page(item.url)
 
     patron  = '<div class="item">\s*'
@@ -154,20 +145,12 @@ def grabing(item):
     itemlist = []
     if item.title:
         filmtitle = item.title
-        
-        #open the selenium connection
-        #chromedriver = '/root/.kodi/addons/plugin.video.pelisalacarta/chromedriver'
-        #os.environ['webdriver.chrome.driver'] = chromedriver
-        #display = Display(visible=0, size=(800, 600))
-        #display.start()
-        #br = webdriver.Chrome(chromedriver)
-
         dcap = dict(DesiredCapabilities.PHANTOMJS)
         dcap["phantomjs.page.settings.userAgent"] = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
         br = webdriver.PhantomJS(executable_path='/storage/.kodi/addons/plugin.video.pelisalacarta/phantomjs',desired_capabilities = dcap, service_log_path=os.path.devnull)
         br.get(item.url)
         br.get(item.url)
-
+        #nData is a JS variable with films url
         nData = br.execute_script("return nData")
         for block in nData:
             #extract parametert url from list
@@ -182,5 +165,3 @@ def playit(item):
     if not xbmc.Player().isPlayingVideo():
         xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(item.url)
     return itemlist
-
-
