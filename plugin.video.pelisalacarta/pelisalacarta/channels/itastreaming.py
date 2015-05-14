@@ -6,10 +6,11 @@
 #------------------------------------------------------------
 import selenium
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from pyvirtualdisplay import Display
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+#from selenium.webdriver.common.keys import Keys
+#from pyvirtualdisplay import Display
 import urlparse,urllib2,urllib,re,xbmcplugin,xbmcgui,xbmcaddon,xbmc
-import os, sys
+import os, sys, time
 
 from core import logger
 from core import config
@@ -27,13 +28,17 @@ __language__ = "IT"
 
 DEBUG = config.get_setting("debug")
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:20.0) Gecko/20100101 Firefox/20.0"
+
+
 def isGeneric():
     return True
+
 
 def mainlist(item):
     logger.info("pelisalacarta.itastreaming  mainlist")
 
     itemlist = []
+    itemlist.append( Item(channel=__channel__ , action="peliculas", title="ultimi film inseriti..." , url="http://itastreaming.tv" ))
     itemlist.append( Item(channel=__channel__ , action="peliculas", title="animazione" , url="http://itastreaming.tv/genere/animazione" ))
     itemlist.append( Item(channel=__channel__ , action="peliculas", title="avventura" , url="http://itastreaming.tv/genere/avventura" ))
     itemlist.append( Item(channel=__channel__ , action="peliculas", title="azione" , url="http://itastreaming.tv/genere/azione" ))
@@ -95,7 +100,10 @@ def search(item,text):
         return []
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
 def peliculas(item):
     logger.info("pelisalacarta.itastreaming peliculas")
     itemlist = []
@@ -127,40 +135,40 @@ def peliculas(item):
     print matches
     
     if not matches:
-		patternpage = "<span class='current'.*?</span>"
-		patternpage += "<a rel='nofollow' class='page larger' href='([^']+)'>.*?</a>"
-		matches = re.compile(patternpage,re.DOTALL).findall(data) 
+        patternpage = "<span class='current'.*?</span>"
+        patternpage += "<a rel='nofollow' class='page larger' href='([^']+)'>.*?</a>"
+        matches = re.compile(patternpage,re.DOTALL).findall(data)
     
     scrapertools.printMatches(matches)
-    
-    
-    if len(matches)>0:
+
+    if len(matches) > 0:
         scrapedurl = urlparse.urljoin(item.url,matches[0])
         itemlist.append( Item(channel=__channel__, action="peliculas", title="Next Page >>" , url=scrapedurl , folder=True) )
     
     
     return itemlist
 
-
+# use selenium with phantomjs (phantomjs - 1.9.8 Linux x86_64 )
 def grabing(item):
     logger.info("pelisalacarta.itastreaming grabing")
     itemlist = []
-    #esegue questa funziona solo se si clicca sul titolo del film
     if item.title:
         filmtitle = item.title
         
         #open the selenium connection
-        chromedriver = '/root/.kodi/addons/plugin.video.pelisalacarta/chromedriver'
-        os.environ['webdriver.chrome.driver'] = chromedriver
-        display = Display(visible=0, size=(800, 600))
-        display.start()
-        br = webdriver.Chrome(chromedriver)
-       
-        br.get(item.url)  
-        #variable pro films
+        #chromedriver = '/root/.kodi/addons/plugin.video.pelisalacarta/chromedriver'
+        #os.environ['webdriver.chrome.driver'] = chromedriver
+        #display = Display(visible=0, size=(800, 600))
+        #display.start()
+        #br = webdriver.Chrome(chromedriver)
+
+        dcap = dict(DesiredCapabilities.PHANTOMJS)
+        dcap["phantomjs.page.settings.userAgent"] = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
+        br = webdriver.PhantomJS(executable_path='/storage/.kodi/addons/plugin.video.pelisalacarta/phantomjs',desired_capabilities = dcap, service_log_path=os.path.devnull)
+        br.get(item.url)
+        br.get(item.url)
+
         nData = br.execute_script("return nData")
-        #print nData #ok we have all the urls
-        #xbmc.Player(xbmc.PLAYER_CORE_MPLAYER).play(decoded)
         for block in nData:
             #extract parametert url from list
             itemlist.append( Item(channel=__channel__, action="playit", title=filmtitle + "  quality: " + block['width'] +  " x " + block['height'] , url=block['url'] ))
