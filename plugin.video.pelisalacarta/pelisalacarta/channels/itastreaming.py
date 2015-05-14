@@ -62,9 +62,40 @@ def mainlist(item):
          
     return itemlist
 
+#searching for films
+def search(item,text):
+    logger.info("[itastreaming.py] search "+text)
+    itemlist = []
+    text = text.replace(" ","%20")
+    item.url = "http://itastreaming.tv/?s="+text #http://itastreaming.tv/?s=nani
 
 
-#azione "peliculas" server per estrerre i titoli
+    try:
+
+        data = scrapertools.cache_page(item.url)
+
+        pattern = '<img class="imx" style="margin-top:0px;" src="?([^>"]+)"?.*?alt="?([^>"]+)"?.*?'
+        pattern += '<h3><a href="?([^>"]+)"?.*?</h3>'
+        matches = re.compile(pattern,re.DOTALL).findall(data)
+
+        scrapertools.printMatches(matches)
+
+        for scrapedthumbnail,scrapedtitle,scrapedurl in matches:
+            title = scrapedtitle.strip()
+            url = urlparse.urljoin(item.url,scrapedurl)
+            thumbnail = urlparse.urljoin(item.url,scrapedthumbnail)
+
+            itemlist.append( Item(channel=__channel__, action="grabing", title=title , url=url , thumbnail=thumbnail , folder=True) )
+        return itemlist
+
+    except:
+        import sys
+        for line in sys.exc_info():
+            logger.error( "%s" % line )
+        return []
+
+
+
 def peliculas(item):
     logger.info("pelisalacarta.itastreaming peliculas")
     itemlist = []
