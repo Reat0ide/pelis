@@ -13,6 +13,8 @@ from core import scrapertools
 from core.item import Item
 from servers import servertools
 
+
+
 __channel__ = "guardarefilm"
 __category__ = "F"
 __type__ = "generic"
@@ -21,7 +23,6 @@ __language__ = "IT"
 
 DEBUG = config.get_setting("debug")
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:20.0) Gecko/20100101 Firefox/20.0"
-
 def isGeneric():
     return True
 
@@ -33,6 +34,8 @@ def mainlist(item):
     return itemlist
 
 
+
+#azione "peliculas" server per estrerre i titoli
 def peliculas(item):
     logger.info("pelisalacarta.itastreaming_test peliculas")
     itemlist = []
@@ -77,26 +80,29 @@ def season(item):
 def grabing(item):
     itemlist = []
     data = scrapertools.cache_page(item.url)
-    print item.url
-    print item.title
-
-    pattern = '<div class="tab-pane fade" id="' + item.title + '">\s*'
-    pattern += '<ul class="reset series_list">\s*'
-    pattern += '<li id="([^>"]+).*?<a href="#" class="links-sd".*?data-link="(.*?)"'
-    matches = re.compile(pattern,re.MULTILINE).findall(data)
-    print matches
-
-    #test with bs4
     soup = BeautifulSoup(data)
-    for div in soup.find_all('div', attrs={'id' : item.title}):
-        print div
-        for li in div.find_all('data-link'):
-            print li
+    div = soup.find('div', attrs={'id' : item.title})
 
+    for result in div.find_all('li'):
+        data = str(result)
+        pattern = '<span class="title">(.*?)\s</span>(.*?)'
+        pattern += '<a class="links-sd" data-link="(.*?)"'
+        matches = re.compile(pattern,re.DOTALL).findall(data)
+        for scrapedtitle,i,scrapedurl  in matches:
+            itemlist.append( Item(channel=__channel__, action="playit", url=scrapedurl, title=scrapedtitle, folder=True) )
 
+    return itemlist
 
 def playit(item):
-
     itemlist = []
-    print "bar"
+    data = scrapertools.cache_page(item.url)
+    url = scrapertools.find_single_match(data,'file: (.*?)\s')
+    url = ''.join(url)
+    url = url[1:-1]
+    itemlist.append( Item(channel=__channel__, action="playit", title=item.title , url=url))
+
+    if not xbmc.Player().isPlayingVideo():
+        xbmc.Player(xbmc.PLAYER_CORE_AUTO).play(url)
+        xbmc.addDir('','','','')
     return itemlist
+
