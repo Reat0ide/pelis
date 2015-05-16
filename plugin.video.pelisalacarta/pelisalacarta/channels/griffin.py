@@ -5,15 +5,10 @@
 # http://blog.tvalacarta.info/plugin-xbmc/pelisalacarta/
 #------------------------------------------------------------
 import urlparse,urllib2,urllib,re,xbmcplugin,xbmcgui,xbmcaddon,xbmc
-import os, sys
-
 from core import logger
 from core import config
 from core import scrapertools
 from core.item import Item
-from servers import servertools
-import json
-   
 
 __channel__ = "griffin"
 __category__ = "F"

@@ -31,14 +31,14 @@ import shutil
 if not os.path.exists(directorio):
     os.mkdir(directorio)
 
-nombre_fichero_config_canal = os.path.join( config.get_library_path() , "series.xml" )
+nombre_fichero_config_canal = os.path.join( config.get_library_path(), "series.xml" )
 if not os.path.exists(nombre_fichero_config_canal):
-    nombre_fichero_config_canal = os.path.join( config.get_data_path() , "series.xml" )
+    nombre_fichero_config_canal = os.path.join( config.get_data_path(), "series.xml" )
 
 try:
 
-    if config.get_setting("updatelibrary")=="true":
-        config_canal = open( nombre_fichero_config_canal , "r" )
+    if config.get_setting("updatelibrary") == "true":
+        config_canal = open( nombre_fichero_config_canal, "r")
         
         for serie in config_canal.readlines():
             logger.info("[library_service.py] serie="+serie)
