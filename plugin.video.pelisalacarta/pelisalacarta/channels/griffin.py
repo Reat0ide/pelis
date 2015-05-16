@@ -18,6 +18,8 @@ __language__ = "IT"
 
 DEBUG = config.get_setting("debug")
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:20.0) Gecko/20100101 Firefox/20.0"
+
+
 def isGeneric():
     return True
 
@@ -41,8 +43,6 @@ def mainlist(item):
     return itemlist
 
 
-
-#azione "peliculas" server per estrerre i titoli
 def peliculas(item):
     logger.info("pelisalacarta.griffin peliculas")
     itemlist = []
@@ -57,25 +57,20 @@ def peliculas(item):
     print matches
     
     #create title from url
-    for result in matches:
-		url='http://griffinita.altervista.org'
-		url+=''.join(result)
-		title=''.join(result)
-		title=title[1:]
-		itemlist.append( Item(channel=__channel__, action="playit", title=title , url=url, folder=True) )
-	
-    return itemlist
 
+    for result in matches:
+        url='http://griffinita.altervista.org'
+        url+=''.join(result)
+        title=''.join(result)
+        title=title[1:]
+        itemlist.append( Item(channel=__channel__, action="playit", title=title , url=url, folder=True) )
+
+    return itemlist
 
 def playit(item):
     itemlist = []
     
     data = scrapertools.cache_page(item.url)
-    
-    '''
-    <div class="itemFullText">
-    <p><iframe height="400" src="https://docs.google.com/file/d/0B1uREFqXSZCZVVh5SnM4Y2pqeWc/preview" allowfullscreen="1" webkitallowfullscreen="1" width="100%"></iframe></p>	  </div>
-    '''                                        	  	
     pattern = '<div class="itemFullText">\s*'
     pattern += '<p><iframe height="400" src="?([^>"]+)"?'
     decodedurl = re.compile(pattern,re.DOTALL).findall(data)
@@ -88,4 +83,3 @@ def playit(item):
         xbmc.Player(xbmc.PLAYER_CORE_AUTO).play(googleurl)
         
     return itemlist
-
