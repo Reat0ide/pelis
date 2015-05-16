@@ -103,6 +103,6 @@ def playit(item):
 
     if not xbmc.Player().isPlayingVideo():
         xbmc.Player(xbmc.PLAYER_CORE_AUTO).play(url)
-        
+
     return itemlist
 
