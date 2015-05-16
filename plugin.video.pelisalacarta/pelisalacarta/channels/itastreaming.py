@@ -68,11 +68,11 @@ def mainlist(item):
     return itemlist
 
 #searching for films
-def search(item,text):
-    logger.info("[itastreaming.py] search "+text)
+def search(item, text):
+    logger.info("[itastreaming.py] search " + text)
     itemlist = []
-    text = text.replace(" ","%20")
-    item.url = "http://itastreaming.tv/?s="+text #http://itastreaming.tv/?s=nani
+    text = text.replace(" ", "%20")
+    item.url = "http://itastreaming.tv/?s=" + text
     try:
 
         data = scrapertools.cache_page(item.url)
@@ -81,18 +81,18 @@ def search(item,text):
         matches = re.compile(pattern,re.DOTALL).findall(data)
         scrapertools.printMatches(matches)
         
-        for scrapedthumbnail,scrapedtitle,scrapedurl in matches:
+        for scrapedthumbnail, scrapedtitle, scrapedurl in matches:
             title = scrapedtitle.strip()
-            url = urlparse.urljoin(item.url,scrapedurl)
-            thumbnail = urlparse.urljoin(item.url,scrapedthumbnail)
-            itemlist.append( Item(channel=__channel__, action="grabing", title=title , url=url , thumbnail=thumbnail , folder=True) )
+            url = urlparse.urljoin(item.url, scrapedurl)
+            thumbnail = urlparse.urljoin(item.url, scrapedthumbnail)
+            itemlist.append(Item(channel=__channel__, action="grabing", title=title, url=url, thumbnail=thumbnail, folder=True))
         
         return itemlist
 
     except:
         import sys
         for line in sys.exc_info():
-            logger.error( "%s" % line )
+            logger.error("%s" % line)
         return []
 
 
@@ -102,7 +102,7 @@ def peliculas(item):
     
     data = scrapertools.cache_page(item.url)
 
-    patron  = '<div class="item">\s*'
+    patron = '<div class="item">\s*'
     patron += '<a href="?([^>"]+)"?.*?title="?([^>"]+)"?.*?'
     patron += '<div class="img">\s*'
     patron += '<img.*?src="([^>"]+)'
