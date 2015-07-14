@@ -139,7 +139,7 @@ def peliculas(item):
     
     return itemlist
 
-# use selenium with phantomjs (phantomjs - 1.9.8 Linux x86_64 )
+'''# use selenium with phantomjs (phantomjs - 1.9.8 Linux x86_64 )
 def grabing(item):
     logger.info("pelisalacarta.itastreaming grabing")
     itemlist = []
@@ -156,6 +156,37 @@ def grabing(item):
             #extract parametert url from list
             itemlist.append( Item(channel=__channel__, action="playit", title=filmtitle + "  quality: " + block['width'] +  " x " + block['height'] , url=block['url'] ))
         br.close()
+    return itemlist
+'''
+def grabing(item):
+    data = scrapertools.cache_page(item.url)
+    logger.info("pelisalacarta.itastreaming_test grabing")
+    itemlist = []
+    #esegue questa funziona solo se si clicca sul titolo del film
+    if item.title:
+        filmtitle = item.title
+
+        dcap = dict(DesiredCapabilities.PHANTOMJS)
+        dcap["phantomjs.page.settings.userAgent"] = (
+             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
+        browser = webdriver.PhantomJS(executable_path='/storage/.kodi/addons/plugin.video.pelisalacarta/phantomjs',desired_capabilities = dcap, service_log_path=os.path.devnull)
+        browser.get(item.url)
+
+        try:
+            nData = browser.execute_script("return nData")
+            for block in nData:
+                itemlist.append( Item(channel=__channel__, action="playit", title=filmtitle + "  quality: " + block['width'] +  " x " + block['height'] , url=block['url'] ))
+            browser.close()
+
+        except:
+            fakeurl = re.findall('"((http)s?://www.hdpass.link.*?)"', data)
+            url =  fakeurl[0][0]
+            browser.get(url)
+            nData = browser.execute_script("return nData")
+            for block in nData:
+                itemlist.append( Item(channel=__channel__, action="playit", title=filmtitle + "  quality: " + block['width'] +  " x " + block['height'] , url=block['url'] ))
+            browser.close()
+
     return itemlist
 
 def playit(item):

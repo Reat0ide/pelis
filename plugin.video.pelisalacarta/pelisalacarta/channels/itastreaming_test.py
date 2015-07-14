@@ -120,30 +120,23 @@ def grabing(item):
     if item.title:
         filmtitle = item.title
         
-        #open the selenium connection
-        #chromedriver = '/root/.kodi/addons/plugin.video.pelisalacarta/chromedriver'
-        #os.environ['webdriver.chrome.driver'] = chromedriver
-        #display = Display(visible=0, size=(800, 600))
-        #display.start()
-        #br = webdriver.Chrome(chromedriver)
+
         dcap = dict(DesiredCapabilities.PHANTOMJS)
         dcap["phantomjs.page.settings.userAgent"] = (
              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0")
-        browser = webdriver.PhantomJS(executable_path='/storage/.kodi/addons/plugin.video.pelisalacarta/phantomjs',desired_capabilities = dcap, service_log_path=os.path.devnull)
-        
-       
-       
-       
+        browser = webdriver.PhantomJS(executable_path='/bin/phantomjs',desired_capabilities = dcap, service_log_path=os.path.devnull)
         browser.get(item.url)
-        #time.sleep(20)  
-        #variable pro films
-        nData = browser.execute_script("return nData")
-        #print nData #ok we have all the urls
-        #xbmc.Player(xbmc.PLAYER_CORE_MPLAYER).play(decoded)
-        for block in nData:
-            #extract parametert url from list
-            itemlist.append( Item(channel=__channel__, action="playit", title=filmtitle + "  quality: " + block['width'] +  " x " + block['height'] , url=block['url'] ))
-        browser.close()
+
+
+        if (browser.execute_script("return nData")):
+            nData = browser.execute_script("return nData")
+            for block in nData:
+                itemlist.append( Item(channel=__channel__, action="playit", title=filmtitle + "  quality: " + block['width'] +  " x " + block['height'] , url=block['url'] ))
+            browser.close()
+        else:
+            print "no nData found"
+
+
     return itemlist
 
 def playit(item):
